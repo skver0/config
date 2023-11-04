@@ -1,0 +1,3 @@
+//@theme "/nix/store/nbqbv2a5xphdly4h5pv5n55ncysaxbjz-rofi-1.7.5/share/rofi/themes/Arc-Dark.rasi"
+//@theme "/nix/store/5fkvh48sqq2p9zskdwwi6d7x5h54kiqg-rofi-1.7.5/share/rofi/themes/Arc-Dark.rasi"
+@import "~/.cache/wal/colors-rofi-dark"

@@ -1,0 +1,40 @@
+{ config, pkgs, ... }:
+{
+ environment.systemPackages = with pkgs; [
+    dunst
+    polybar
+    cifs-utils
+    xbindkeys xsel xdotool
+    authy
+    virt-manager
+    gtop
+    libgtop
+    glib
+    openrgb
+    alsa-utils
+    gnupg
+    nodejs
+    wget
+    zip
+    alacritty
+    rofi
+    gnome3.gnome-keyring
+    gnome3.eog
+    xfce.thunar
+    htop
+    killall
+    zip
+    unzip
+    rar
+    unrar
+    p7zip
+    ffmpeg
+    mpv
+    wineWowPackages.staging
+    winetricks
+    lxappearance
+    git
+    qemu_kvm
+    qjackctl
+  ];
+}
