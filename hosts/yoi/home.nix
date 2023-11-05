@@ -37,6 +37,7 @@
     rpi-imager
     texlive.combined.scheme-full
     inputs.nix-gaming.packages.x86_64-linux.osu-stable
+    waybar
   ];
 
   home.file = {

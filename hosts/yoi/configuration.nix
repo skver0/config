@@ -29,11 +29,11 @@
   services.dbus.enable = true;
   services.gnome.gnome-keyring.enable = true;
 
+  programs.hyprland.enable = true;
+
+  services.xserver.displayManager.gdm.enable = true;
   services.xserver = {
     enable = true;
-    windowManager.i3 = {
-      enable = true;
-    };
     layout = "hu";
     libinput = {
       enable = true;
@@ -50,10 +50,10 @@
   ];
 
   # display setup
-  services.xserver.displayManager.setupCommands = ''
-    ${pkgs.xorg.xrandr}/bin/xrandr --output HDMI-0 --left-of DP-2
-    ${pkgs.xorg.xrandr}/bin/xrandr --output DP-2 --primary --mode 1920x1080 --rate 144.00
-  '';
+  #  services.xserver.displayManager.setupCommands = ''
+  #    ${pkgs.xorg.xrandr}/bin/xrandr --output HDMI-0 --left-of DP-2
+  #    ${pkgs.xorg.xrandr}/bin/xrandr --output DP-2 --primary --mode 1920x1080 --rate 144.00
+  #'';
   
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.opengl.enable = true;  
@@ -68,13 +68,7 @@
   networking.hostName = "yoi";
   time.timeZone = "Europe/Budapest";
 
-  xdg.portal = {
-    enable = true;
-    wlr.enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-  };
-
-  # my man how are you going to play osu
+  # man how are you going to play osu
   hardware.opentabletdriver.enable = true;
 
   programs.dconf.enable = true;
@@ -100,6 +94,10 @@
     isNormalUser = true;
     extraGroups = [ "libvirtd" "wheel" "audio" "jackaudio" "storage" ];
     shell = pkgs.fish; 
+  };
+
+  environment.sessionVariables = {
+    NIXOS_OZONE_WL = "1";
   };
 
   #virtualisation.vmware.host.enable = true;
