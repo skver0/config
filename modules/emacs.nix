@@ -8,8 +8,6 @@
     doomPrivateDir = ../home/doom.d;
   };
 
-  services.emacs.enable = true;
-
   home.packages = with pkgs; [
     ripgrep
     nodejs

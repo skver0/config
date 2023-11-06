@@ -36,5 +36,6 @@
     git
     qemu_kvm
     qjackctl
+    shared-mime-info
   ];
 }
