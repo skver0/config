@@ -33,7 +33,6 @@ in
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "hakudatsu"; # Define your hostname.
-  nix.settings.experimental-features = "nix-command flakes";
 
   networking.networkmanager.enable = true;
 
@@ -53,7 +52,7 @@ in
   console.keyMap = "hu101";
 
   services.printing.enable = true;
-
+  
   services.xserver.libinput.enable = true;
   services.xserver.libinput.touchpad.naturalScrolling = true;
   programs.fish.enable = true;
@@ -96,6 +95,7 @@ in
      gnome3.eog
      wineWowPackages.waylandFull
      winetricks
+     php
   ];
 
   services.fprintd = {
