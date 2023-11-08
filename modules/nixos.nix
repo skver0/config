@@ -27,7 +27,7 @@
   nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   networking.firewall.logRefusedConnections = false;
-
+  xdg.mime.enable = true;
   nix.gc = {
    automatic = true;
    dates = "weekly";
