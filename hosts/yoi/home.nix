@@ -10,6 +10,9 @@
 
   home.stateVersion = "23.05"; 
   home.packages = with pkgs; [
+    grim
+    slurp
+    wl-clipboard
     firefox
     (jetbrains.plugins.addPlugins jetbrains.idea-ultimate [ "github-copilot" "darcula-pitch-black" ])
     vscode
@@ -38,6 +41,8 @@
     texlive.combined.scheme-full
     inputs.nix-gaming.packages.x86_64-linux.osu-stable
     waybar
+    jdk17
+    hyprpaper
   ];
 
   home.file = {

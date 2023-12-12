@@ -20,7 +20,7 @@
     rofi
     gnome3.gnome-keyring
     gnome3.eog
-    xfce.thunar
+    gnome3.nautilus
     htop
     killall
     zip

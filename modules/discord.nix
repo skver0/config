@@ -3,7 +3,7 @@
   nixpkgs.overlays = [
     (self: super: {
       discord = super.discord.override {
-        withOpenASAR = true;
+#        withOpenASAR = true;
         withVencord = true;
       };
     })

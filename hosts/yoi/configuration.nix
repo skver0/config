@@ -12,6 +12,8 @@
     trusted-public-keys = ["nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="];
   };
 
+    programs.adb.enable = true;  
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 2;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -30,6 +32,7 @@
   services.gnome.gnome-keyring.enable = true;
 
   programs.hyprland.enable = true;
+  programs.hyprland.enableNvidiaPatches = true;
 
   services.xserver.displayManager.gdm.enable = true;
   services.xserver = {
@@ -60,10 +63,14 @@
   hardware.opengl.driSupport32Bit = true;
   hardware.opengl.extraPackages32 = with pkgs.pkgsi686Linux; [ libva ];
   hardware.nvidia.modesetting.enable = true;
-  
+
+  services.flatpak.enable = true;
+  # REMOVE THIS LOOOL
+#  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.production;
+#  hardware.nvidia.open = true;
   # torrent client, wireguard, nginx
-  networking.firewall.allowedTCPPorts = [ 57466 24800 80 ];
-  networking.firewall.allowedUDPPorts = [ 57466 24800 80 ];
+  networking.firewall.allowedTCPPorts = [ 57466 24800 25565 80 ];
+  networking.firewall.allowedUDPPorts = [ 57466 24800 25565 80 ];
 
   networking.hostName = "yoi";
   time.timeZone = "Europe/Budapest";
