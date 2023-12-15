@@ -52,12 +52,14 @@ in
   console.keyMap = "hu101";
 
   services.printing.enable = true;
-  
+
   services.xserver.libinput.enable = true;
   services.xserver.libinput.touchpad.naturalScrolling = true;
   programs.fish.enable = true;
-  
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  services.postgresql = {
+  enable = true;
+};
+# Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.skver = {
     shell = pkgs.fish;
     isNormalUser = true;
@@ -106,8 +108,6 @@ in
   networking.firewall = {
     allowedUDPPorts = [ 51820 ];
   };
-
-  virtualisation.docker.enable = true;
 
   system.stateVersion = "23.05"; # Did you read the comment? :)
 }
