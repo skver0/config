@@ -113,7 +113,11 @@
        :lang
        ;;agda              ; types of types of types of types...
        ;;beancount         ; mind the GAAP
+<<<<<<< HEAD
        ;;cc                ; C > C++ == 1
+=======
+       (cc +lsp)                ; C > C++ == 1
+>>>>>>> edc670131692ddeec0714b0bfb300ee923c73fc5
        ;;clojure           ; java with a lisp
        ;;common-lisp       ; if you've seen one lisp, you've seen them all
        ;;coq               ; proofs-as-programs

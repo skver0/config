@@ -10,12 +10,12 @@
   home.stateVersion = "23.05"; 
   home.packages = with pkgs; [
     (jetbrains.plugins.addPlugins jetbrains.idea-ultimate [ "github-copilot" ])
+    jetbrains-toolbox
     vscode
     obsidian
     gimp
     pavucontrol
     chromium
-    discord
     spotify
     pfetch
     flameshot
@@ -27,13 +27,18 @@
     nodejs
     nodePackages.pnpm
     waybar
-    wofi
+    rofi
     kanshi
+    wl-clipboard
+    slurp
+    grim
+    steam-run
+    networkmanagerapplet
   ];
   home.file = {
     ".config/i3".source = ../../home/i3;
     ".config/polybar".source = ../../home/polybar;
-    ".config/rofi".source = ../../home/rofi;
+#    ".config/rofi".source = ../../home/rofi;
     ".config/alacritty".source = ../../home/alacritty;
   };
   programs.home-manager.enable = true;
