@@ -1,0 +1,13 @@
+[font]
+size = 8
+
+[font.normal]
+family = "dina"
+
+[window.dimensions]
+columns = 90
+lines = 30
+
+[window.padding]
+x = 10
+y = 10

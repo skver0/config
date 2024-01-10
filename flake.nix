@@ -6,11 +6,20 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nix-gaming.url = "github:fufexan/nix-gaming";
-    nix-doom-emacs.url = "github:nix-community/nix-doom-emacs";
+    nix-straight = {
+      url = "github:codingkoi/nix-straight.el?ref=codingkoi/apply-librephoenixs-fix";
+      flake = false;
+    };
+    nix-doom-emacs = {
+      url = "github:nix-community/nix-doom-emacs";
+      inputs.nix-straight.follows = "nix-straight";
+    }; 
+    hyprland.url = "github:hyprwm/Hyprland";
   };
 
   outputs = inputs@{ self, nixpkgs, home-manager, nix-gaming, nix-doom-emacs, ... }: {
     nixosConfigurations = {
+      
       yoi = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [

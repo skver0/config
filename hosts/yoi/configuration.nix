@@ -9,32 +9,43 @@
 
   nix.settings = {
     substituters = ["https://nix-gaming.cachix.org"];
-    trusted-public-keys = ["nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="];
+    trusted-public-keys = ["nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4=" "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
   };
 
-    programs.adb.enable = true;  
+  nixpkgs.overlays = [
+      (_: prev: {
+          steam = prev.steam.override {
+              extraProfile = "export STEAM_EXTRA_COMPAT_TOOLS_PATHS='${inputs.nix-gaming.packages.${pkgs.system}.proton-ge}'";
+          };
+      })
+  ];
 
+  programs.adb.enable = true;  
+  virtualisation.docker.enable = true;
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 2;
   boot.loader.efi.canTouchEfiVariables = true;
-
   boot.supportedFilesystems = [ "ntfs" ];  
-
   boot.kernelPackages = pkgs.linuxPackages_zen; #pkgs.linuxPackages_latest;
   boot.kernelModules = [ "i2c-dev" "i2c-piix4" "vfio-pci" ];
-
   boot.blacklistedKernelModules = [ "amdgpu" "radeon" ];
-  boot.kernelParams = [ "acpi_enforce_resources=lax" "pcie_acs_override=downstream,multifunction" "vfio-pci.ids=1002:6610,1002:aab0" ]; 
-  #openrgb aint working without the last one
+  boot.kernelParams = [ "acpi_enforce_resources=lax" "pcie_acs_override=downstream,multifunction" "vfio-pci.ids=1002:6610,1002:aab0" "quiet" "udev.log_level=0" ]; 
+  boot.tmp.cleanOnBoot = true;
+
+  boot.initrd.verbose = false;
+  boot.consoleLogLevel = 0;
 
   services.postgresql.enable = true;
   services.dbus.enable = true;
   services.gnome.gnome-keyring.enable = true;
+  # services.xserver.displayManager.gdm.enable = true;
 
-  programs.hyprland.enable = true;
-  programs.hyprland.enableNvidiaPatches = true;
+  programs.hyprland = {
+    enable = true;
+    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+    portalPackage = inputs.hyprland.packages."${pkgs.system}".xdg-desktop-portal-hyprland;
+  };
 
-  services.xserver.displayManager.gdm.enable = true;
   services.xserver = {
     enable = true;
     layout = "hu";
@@ -46,28 +57,35 @@
     };
   };
 
+  services.openssh = {
+    enable = true;
+    passwordAuthentication = true;
+	  # I'll disable this once I can connect.
+  };
+
+  services.greetd = {
+    enable = true;
+    settings = rec {
+      initial_session = {
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --cmd Hyprland";
+        user = "skver";
+      };
+      default_session = initial_session;
+    };
+  };
+
   # udev rules for rgb, keyboard etc
   services.udev.packages = with pkgs; [
    via
    openrgb
   ];
 
-  # display setup
-  #  services.xserver.displayManager.setupCommands = ''
-  #    ${pkgs.xorg.xrandr}/bin/xrandr --output HDMI-0 --left-of DP-2
-  #    ${pkgs.xorg.xrandr}/bin/xrandr --output DP-2 --primary --mode 1920x1080 --rate 144.00
-  #'';
-  
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.opengl.enable = true;  
   hardware.opengl.driSupport32Bit = true;
   hardware.opengl.extraPackages32 = with pkgs.pkgsi686Linux; [ libva ];
   hardware.nvidia.modesetting.enable = true;
 
-  services.flatpak.enable = true;
-  # REMOVE THIS LOOOL
-#  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.production;
-#  hardware.nvidia.open = true;
   # torrent client, wireguard, nginx
   networking.firewall.allowedTCPPorts = [ 57466 24800 25565 80 ];
   networking.firewall.allowedUDPPorts = [ 57466 24800 25565 80 ];
@@ -94,6 +112,7 @@
      "x-systemd.automount"
      "windows_names"
      "prealloc"
+     "big_writes"
     ];
   };
 
@@ -107,15 +126,13 @@
     NIXOS_OZONE_WL = "1";
   };
 
-  #virtualisation.vmware.host.enable = true;
-  #virtualisation.virtualbox.host.enable = true;
   virtualisation.libvirtd = {
     enable = true;
     qemu = {
      swtpm.enable = true;
+#     ovmf.packages = [ pkgs.OVMFFull ];
     };  
   };
-  #virtualisation.docker.enable = true;
 
   system.stateVersion = "22.11"; # Did you read the comment? yes, dont change this value unless you know what you are doing
 }

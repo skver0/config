@@ -17,7 +17,6 @@
     (jetbrains.plugins.addPlugins jetbrains.idea-ultimate [ "github-copilot" "darcula-pitch-black" ])
     vscode
     easyeffects
-    obsidian
     audacity
     prismlauncher
     lutris
@@ -39,10 +38,14 @@
     pywal
     rpi-imager
     texlive.combined.scheme-full
-    inputs.nix-gaming.packages.x86_64-linux.osu-stable
+    inputs.nix-gaming.packages.x86_64-linux.osu-lazer-bin
     waybar
     jdk17
     hyprpaper
+    php
+    mangohud
+    python3
+    any-nix-shell
   ];
 
   home.file = {
@@ -51,6 +54,9 @@
     ".config/rofi".source = ../../home/rofi;
     ".config/alacritty".source = ../../home/alacritty;
   };
+
+  xdg.enable = true;
+  xdg.mime.enable = true;
   
   programs.home-manager.enable = true;
 }
