@@ -2,18 +2,12 @@
 {
  environment.systemPackages = with pkgs; [
     dunst
-    polybar
     cifs-utils
-    xbindkeys xsel xdotool
     authy
     virt-manager
-    gtop
-    libgtop
     glib
-    openrgb
     alsa-utils
     gnupg
-    nodejs
     wget
     zip
     alacritty

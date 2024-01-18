@@ -57,12 +57,6 @@
     };
   };
 
-  services.openssh = {
-    enable = true;
-    passwordAuthentication = true;
-	  # I'll disable this once I can connect.
-  };
-
   services.greetd = {
     enable = true;
     settings = rec {
@@ -85,6 +79,8 @@
   hardware.opengl.driSupport32Bit = true;
   hardware.opengl.extraPackages32 = with pkgs.pkgsi686Linux; [ libva ];
   hardware.nvidia.modesetting.enable = true;
+#  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.production;
+#  hardware.nvidia.open = true;
 
   # torrent client, wireguard, nginx
   networking.firewall.allowedTCPPorts = [ 57466 24800 25565 80 ];
@@ -99,7 +95,7 @@
   programs.dconf.enable = true;
   programs.fish.enable = true;
   # hacky fix to auto mount ntfs partition
-  fileSystems."/mnt" = {
+/*  fileSystems."/mnt/hdd" = {
     device = "/dev/disk/by-uuid/6A0AD5730AD53CAF";
     fsType = "auto";
     options = [ 
@@ -113,6 +109,15 @@
      "windows_names"
      "prealloc"
      "big_writes"
+    ];
+  };
+*/
+  fileSystems."/mnt/share" = {
+    device = "192.168.0.104:/mnt/pool";
+    fsType = "nfs";
+    options = [ 
+       "x-systemd.automount" "noauto"
+       "x-systemd.idle-timeout=600"
     ];
   };
 

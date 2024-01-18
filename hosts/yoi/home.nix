@@ -13,7 +13,6 @@
     grim
     slurp
     wl-clipboard
-    firefox
     (jetbrains.plugins.addPlugins jetbrains.idea-ultimate [ "github-copilot" "darcula-pitch-black" ])
     vscode
     easyeffects
@@ -47,6 +46,10 @@
     python3
     any-nix-shell
   ];
+
+  programs.firefox = {
+    enable = true;
+  };
 
   home.file = {
     ".config/i3".source = ../../home/i3;

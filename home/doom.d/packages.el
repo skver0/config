@@ -4,8 +4,3 @@
 (package! elcord)
 (package! svelte-mode)
 (package! lsp-tailwindcss)
-(package! copilot)
-(package! s)
-(package! dash)
-(package! editorconfig)
-(package! json-rpc)

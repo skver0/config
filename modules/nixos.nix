@@ -1,6 +1,7 @@
 { config, pkgs, inputs, ... }: 
 {
   services.fstrim.enable = true;
+  fonts.fontconfig.allowBitmaps = true;
   fonts.fontconfig.enable = true;
   fonts.packages = with pkgs; [
     font-awesome
@@ -11,6 +12,8 @@
     noto-fonts
     noto-fonts-cjk
     noto-fonts-emoji
+    siji
+    creep
   ];
 
   system.autoUpgrade = {
