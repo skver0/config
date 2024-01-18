@@ -36,7 +36,7 @@
     picom
     pywal
     rpi-imager
-    texlive.combined.scheme-full
+#    texlive.combined.scheme-full
     inputs.nix-gaming.packages.x86_64-linux.osu-lazer-bin
     waybar
     jdk17
@@ -47,13 +47,33 @@
     any-nix-shell
   ];
 
+  gtk = {
+    enable = true;
+    theme = {
+      name = "Adwaita-dark";
+      package = pkgs.gnome.gnome-themes-extra;
+    };
+
+    gtk3.extraConfig = {
+      Settings = ''
+        gtk-application-prefer-dark-theme=1
+      '';
+    };
+
+    gtk4.extraConfig = {
+      Settings = ''
+        gtk-application-prefer-dark-theme=1
+      '';
+    };
+  };
+
   programs.firefox = {
     enable = true;
   };
 
   home.file = {
-    ".config/i3".source = ../../home/i3;
-    ".config/polybar".source = ../../home/polybar;
+#    ".config/i3".source = ../../home/i3;
+#    ".config/polybar".source = ../../home/polybar;
     ".config/rofi".source = ../../home/rofi;
     ".config/alacritty".source = ../../home/alacritty;
   };
