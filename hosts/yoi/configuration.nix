@@ -20,7 +20,6 @@
       })
   ];
 
-  programs.adb.enable = true;  
   virtualisation.docker.enable = true;
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 2;
@@ -29,7 +28,7 @@
   boot.kernelPackages = pkgs.linuxPackages_zen; #pkgs.linuxPackages_latest;
   boot.kernelModules = [ "i2c-dev" "i2c-piix4" "vfio-pci" ];
   boot.blacklistedKernelModules = [ "amdgpu" "radeon" ];
-  boot.kernelParams = [ "acpi_enforce_resources=lax" "pcie_acs_override=downstream,multifunction" "vfio-pci.ids=1002:6610,1002:aab0" "quiet" "udev.log_level=0" ]; 
+  boot.kernelParams = [ "acpi_enforce_resources=lax" "pcie_acs_override=downstream,multifunction" "quiet" "udev.log_level=0" ]; 
   boot.tmp.cleanOnBoot = true;
 
   boot.initrd.verbose = false;
@@ -95,23 +94,23 @@
   programs.dconf.enable = true;
   programs.fish.enable = true;
   # hacky fix to auto mount ntfs partition
-/*  fileSystems."/mnt/hdd" = {
-    device = "/dev/disk/by-uuid/6A0AD5730AD53CAF";
-    fsType = "auto";
-    options = [ 
-     "uid=1000"
-     "gid=1000"
-     "rw"
-     "user"
-     "exec"
-     "umask=000" 
-     "x-systemd.automount"
-     "windows_names"
-     "prealloc"
-     "big_writes"
-    ];
-  };
-*/
+#  fileSystems."/mnt/hdd" = {
+#    device = "/dev/disk/by-uuid/6A0AD5730AD53CAF";
+#    fsType = "auto";
+#    options = [ 
+#     "uid=1000"
+#     "gid=1000"
+#     "rw"
+#     "user"
+#     "exec"
+#     "umask=000" 
+#     "x-systemd.automount"
+#     "windows_names"
+#     "prealloc"
+#     "big_writes"
+#    ];
+#  };
+
   fileSystems."/mnt/share" = {
     device = "192.168.0.104:/mnt/pool";
     fsType = "nfs";
