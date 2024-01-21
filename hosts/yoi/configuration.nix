@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, ... }: 
+{ config, lib, pkgs, inputs, ... }: 
 {
   imports =
     [
@@ -17,8 +17,8 @@
           steam = prev.steam.override {
               extraProfile = "export STEAM_EXTRA_COMPAT_TOOLS_PATHS='${inputs.nix-gaming.packages.${pkgs.system}.proton-ge}'";
           };
-      })
-  ];
+      }) 
+ ];
 
   virtualisation.docker.enable = true;
   boot.loader.systemd-boot.enable = true;
@@ -26,12 +26,13 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.supportedFilesystems = [ "ntfs" ];  
   boot.kernelPackages = pkgs.linuxPackages_zen; #pkgs.linuxPackages_latest;
-  boot.kernelModules = [ "i2c-dev" "i2c-piix4" "vfio-pci" ];
-  boot.blacklistedKernelModules = [ "amdgpu" "radeon" ];
-  boot.kernelParams = [ "acpi_enforce_resources=lax" "pcie_acs_override=downstream,multifunction" "quiet" "udev.log_level=0" ]; 
+  boot.kernelModules = [ "i2c-dev" "i2c-piix4" "vfio-pci" "vfio" "vfio_iommu_type1" "vfio_virqfd" ];
+  boot.kernelParams = [ "amd_iommu=on" "acpi_enforce_resources=lax" "pcie_acs_override=downstream,multifunction" "quiet" "udev.log_level=0" ]; 
   boot.tmp.cleanOnBoot = true;
   boot.initrd.verbose = false;
   boot.consoleLogLevel = 0;
+  
+  boot.extraModprobeConfig = "options vfio-pci ids=10de:1381,10de:0fbc";
 
   services.postgresql.enable = true;
   services.dbus.enable = true;
@@ -65,6 +66,9 @@
     enable = true;
     driSupport = true;
     driSupport32Bit = true;
+    extraPackages = with pkgs; [
+       nvidia-vaapi-driver
+    ];
   };  
   services.xserver.videoDrivers = ["nvidia"];
   hardware.nvidia.modesetting.enable = true;
@@ -122,9 +126,13 @@
     enable = true;
     qemu = {
      swtpm.enable = true;
-#     ovmf.packages = [ pkgs.OVMFFull ];
+     package = pkgs.qemu.overrideAttrs (attrs: {
+        patches = attrs.patches ++ [ ../../patches/qemu-8.2.0.patch ];
+	});
     };  
   };
+
+  # more kvm fuckery, im so fucking fed up with anticheats, thank you mr corpo battleye
 
   system.stateVersion = "22.11"; # Did you read the comment? yes, dont change this value unless you know what you are doing
 }

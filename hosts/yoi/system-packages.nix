@@ -31,5 +31,6 @@
     qemu_kvm
     qjackctl
     shared-mime-info
+    xdg-utils
   ];
 }
