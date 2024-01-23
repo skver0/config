@@ -32,5 +32,8 @@
     qjackctl
     shared-mime-info
     xdg-utils
+    (pkgs.hwloc.override {
+      x11Support = true;
+      })
   ];
 }

@@ -741,7 +741,7 @@ index 8748c1ba04..eacc5588e4 100644
 -    [STRING_PRODUCT]            = "QEMU USB Audio",
 +    [STRING_MANUFACTURER]       = "ASUS",
 +    [STRING_PRODUCT]            = "ASUS USB Audio",
-     [STRING_SERIALNUMBER]       = "9182747162471",
+     [STRING_SERIALNUMBER]       = "1",
      [STRING_CONFIG]             = "Audio Configuration",
      [STRING_USBAUDIO_CONTROL]   = "Audio Device",
 @@ -1005,7 +1005,7 @@ static void usb_audio_class_init(ObjectClass *klass, void *data)
@@ -812,7 +812,7 @@ index a6b50dbc8d..777fe956f0 100644
 -    [STR_SERIALNUMBER] = "314159",
 +    [STR_MANUFACTURER] = "ASUS",
 +    [STR_PRODUCT]      = "ASUS USB Hub",
-+    [STR_SERIALNUMBER] = "45783457373144514",
++    [STR_SERIALNUMBER] = "144514",
  };
  
  static const USBDescIface desc_iface_hub = {
@@ -869,14 +869,14 @@ index 5fff487ee5..217c981751 100644
 -    [STRING_SERIALNUMBER]       = "1",
 +    [STRING_MANUFACTURER]       = "ASUS",
 +    [STRING_PRODUCT]            = "RNDIS/ASUS USB Network Device",
-+    [STRING_ETHADDR]            = "4201948915",
++    [STRING_ETHADDR]            = "400144514405",
 +    [STRING_DATA]               = "ASUS USB Net Data Interface",
 +    [STRING_CONTROL]            = "ASUS USB Net Control Interface",
 +    [STRING_RNDIS_CONTROL]      = "ASUS USB Net RNDIS Control Interface",
 +    [STRING_CDC]                = "ASUS USB Net CDC",
 +    [STRING_SUBSET]             = "ASUS USB Net Subset",
 +    [STRING_RNDIS]              = "ASUS USB Net RNDIS",
-+    [STRING_SERIALNUMBER]       = "34784784782348878997",
++    [STRING_SERIALNUMBER]       = "48878997",
  };
  
  static const USBDescIface desc_iface_rndis[] = {
@@ -913,7 +913,7 @@ index 63047d79cf..d9e2d166dd 100644
 +    [STR_MANUFACTURER]    = "ASUS",
 +    [STR_PRODUCT_SERIAL]  = "ASUS USB SERIAL",
 +    [STR_PRODUCT_BRAILLE] = "ASUS USB BAUM BRAILLE",
-+    [STR_SERIALNUMBER]    = "95894539344484",
++    [STR_SERIALNUMBER]    = "39344484",
  };
  
  static const USBDescIface desc_iface0 = {
@@ -948,7 +948,7 @@ index be0a4fc3bc..75cf29af3d 100644
 +#define CCID_PRODUCT_DESCRIPTION        "ASUS USB CCID"
 +#define CCID_VENDOR_DESCRIPTION         "ASUS"
  #define CCID_INTERFACE_NAME             "CCID Interface"
- #define CCID_SERIAL_NUMBER_STRING       "14782811"
+ #define CCID_SERIAL_NUMBER_STRING       "1"
  /*
 @@ -419,8 +419,8 @@ enum {
  };
@@ -958,7 +958,7 @@ index be0a4fc3bc..75cf29af3d 100644
 -    [STR_PRODUCT]       = "QEMU USB CCID",
 +    [STR_MANUFACTURER]  = "ASUS",
 +    [STR_PRODUCT]       = "ASUS USB CCID",
-     [STR_SERIALNUMBER]  = "1349561278231",
+     [STR_SERIALNUMBER]  = "1",
      [STR_INTERFACE]     = "CCID Interface",
  };
 @@ -1443,7 +1443,7 @@ static void ccid_class_initfn(ObjectClass *klass, void *data)
@@ -982,7 +982,7 @@ index e3bcffb3e0..ce4e385b29 100644
 -    [STR_PRODUCT]      = "QEMU USB HARDDRIVE",
 +    [STR_MANUFACTURER] = "ASUS",
 +    [STR_PRODUCT]      = "ASUS USB HARDDRIVE",
-     [STR_SERIALNUMBER] = "99471721",
+     [STR_SERIALNUMBER] = "1",
      [STR_CONFIG_FULL]  = "Full speed config (usb 1.1)",
      [STR_CONFIG_HIGH]  = "High speed config (usb 2.0)",
 @@ -591,7 +591,7 @@ static void usb_msd_class_initfn_common(ObjectClass *klass, void *data)
@@ -1006,7 +1006,7 @@ index f013ded91e..5686a29f6d 100644
 +    [STR_MANUFACTURER] = "ASUS",
      [STR_PRODUCT]      = "USB Attached SCSI HBA",
 -    [STR_SERIALNUMBER] = "27842",
-+    [STR_SERIALNUMBER] = "782378",
++    [STR_SERIALNUMBER] = "33111",
      [STR_CONFIG_HIGH]  = "High speed config (usb 2.0)",
      [STR_CONFIG_SUPER] = "Super speed config (usb 3.0)",
  };
@@ -1022,7 +1022,7 @@ index 7177c17f03..05344274f7 100644
 +    [STR_MANUFACTURER]     = "ASUS",
      [STR_PRODUCT]          = "Wacom PenPartner",
 -    [STR_SERIALNUMBER]     = "1",
-+    [STR_SERIALNUMBER]     = "451128963",
++    [STR_SERIALNUMBER]     = "28843363",
  };
  
  static const uint8_t qemu_wacom_hid_report_descriptor[] = {
@@ -1099,7 +1099,7 @@ index 56001249a4..76ea792988 100644
 -    [STR_MANUFACTURER]     = "QEMU",
 +    [STR_MANUFACTURER]     = "ASUS",
      [STR_PRODUCT]          = "U2F USB key",
-     [STR_SERIALNUMBER]     = "18237837",
+     [STR_SERIALNUMBER]     = "0",
      [STR_CONFIG]           = "U2F key config",
 @@ -322,7 +322,7 @@ static void u2f_key_class_init(ObjectClass *klass, void *data)
      DeviceClass *dc = DEVICE_CLASS(klass);

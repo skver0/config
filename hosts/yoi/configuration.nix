@@ -18,8 +18,7 @@
               extraProfile = "export STEAM_EXTRA_COMPAT_TOOLS_PATHS='${inputs.nix-gaming.packages.${pkgs.system}.proton-ge}'";
           };
       }) 
- ];
-
+  ];
   virtualisation.docker.enable = true;
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 2;
@@ -27,7 +26,7 @@
   boot.supportedFilesystems = [ "ntfs" ];  
   boot.kernelPackages = pkgs.linuxPackages_zen; #pkgs.linuxPackages_latest;
   boot.kernelModules = [ "i2c-dev" "i2c-piix4" "vfio-pci" "vfio" "vfio_iommu_type1" "vfio_virqfd" ];
-  boot.kernelParams = [ "amd_iommu=on" "acpi_enforce_resources=lax" "pcie_acs_override=downstream,multifunction" "quiet" "udev.log_level=0" ]; 
+  boot.kernelParams = [ "amd_iommu=on" "kvm-amd.avic=1" "kvm_amd.nested=1" "kvm_amd.sev=1" "acpi_enforce_resources=lax" "pcie_acs_override=downstream,multifunction" "quiet" "udev.log_level=0" ]; 
   boot.tmp.cleanOnBoot = true;
   boot.initrd.verbose = false;
   boot.consoleLogLevel = 0;
@@ -125,14 +124,44 @@
   virtualisation.libvirtd = {
     enable = true;
     qemu = {
-     swtpm.enable = true;
-     package = pkgs.qemu.overrideAttrs (attrs: {
+      runAsRoot = false;
+      swtpm.enable = true;
+      package = pkgs.qemu_kvm.overrideAttrs (attrs: {
+ hostCpuOnly = true;
         patches = attrs.patches ++ [ ../../patches/qemu-8.2.0.patch ];
-	});
-    };  
+	    });
+      ovmf = {
+        packages = [
+          (pkgs.OVMFFull.override {
+             secureBoot = true;
+             tpmSupport = true;
+             edk2 = pkgs.edk2.overrideAttrs (attrs: {
+              patches = attrs.patches ++ [ ../../patches/edk2-to-am.patch ];
+            });
+          }).fd
+        ];
+      };
+    };
+  };
+
+  environment.etc = {
+    "ovmf/edk2-x86_64-secure-code.fd" = {
+      source = config.virtualisation.libvirtd.qemu.package + "/share/qemu/edk2-x86_64-secure-code.fd";
+    };
+
+    "ovmf/edk2-i386-vars.fd" = {
+      source = config.virtualisation.libvirtd.qemu.package + "/share/qemu/edk2-i386-vars.fd";
+    };
   };
 
   # more kvm fuckery, im so fucking fed up with anticheats, thank you mr corpo battleye
+
+  boot.kernelPatches = [
+     {
+        name = "rdtsc";
+        patch = ../../patches/rdtsc.patch;
+     }
+  ];
 
   system.stateVersion = "22.11"; # Did you read the comment? yes, dont change this value unless you know what you are doing
 }
