@@ -14,7 +14,6 @@
     rofi
     gnome3.gnome-keyring
     gnome3.eog
-    gnome3.nautilus
     htop
     killall
     zip
