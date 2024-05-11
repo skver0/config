@@ -3,6 +3,7 @@
   imports = [
     ../../modules/emacs.nix
     ../../modules/discord.nix
+#    inputs.hyprlock.homeManagerModules.hyprlock
   ];
 
   home.username = "skver";
@@ -29,7 +30,6 @@
     yt-dlp
     obs-studio
     steam-run
-    steam
     spotify
     pfetch
     flameshot
@@ -45,7 +45,14 @@
     mangohud
     python3
     any-nix-shell
+    ark
+    nodejs
+    nodePackages.pnpm
+    gpu-screen-recorder
+    gpu-screen-recorder-gtk
   ];
+
+ #  programs.hyprlock.enable = true;
 
   gtk = {
     enable = true;

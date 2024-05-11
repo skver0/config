@@ -12,24 +12,39 @@
     trusted-public-keys = ["nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4=" "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
   };
 
-  nixpkgs.overlays = [
-      (_: prev: {
-          steam = prev.steam.override {
-              extraProfile = "export STEAM_EXTRA_COMPAT_TOOLS_PATHS='${inputs.nix-gaming.packages.${pkgs.system}.proton-ge}'";
-          };
-      }) 
-  ];
+#  nixpkgs.overlays = [
+#      (_: prev: {
+#          steam = prev.steam.override {
+#              extraProfile = "export STEAM_EXTRA_COMPAT_TOOLS_PATHS='${inputs.nix-gaming.packages.${pkgs.system}.proton-ge}'";
+#          };
+#      }) 
+#  ];
+
+  programs.steam.extraCompatPackages = [ pkgs.proton-ge-bin ];
+  programs.steam.enable = true;
+
+
+  programs.adb.enable = true;
+
   virtualisation.docker.enable = true;
+  virtualisation.vmware.host.enable = true;
+  virtualisation.waydroid.enable = true;
+
+  # security is my passion, how could you tell?
+  security.sudo.wheelNeedsPassword = false;
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 2;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.supportedFilesystems = [ "ntfs" ];  
   boot.kernelPackages = pkgs.linuxPackages_zen; #pkgs.linuxPackages_latest;
-  boot.kernelModules = [ "i2c-dev" "i2c-piix4" "vfio-pci" "vfio" "vfio_iommu_type1" "vfio_virqfd" ];
+  boot.kernelModules = [ "i2c-dev" "i2c-piix4" "vfio-pci" "vfio" "vfio_iommu_type1" "vfio_virqfd" "nvidia_uvm" ];
   boot.kernelParams = [ "nvidia_drm.fbdev=1" "nvidia_drm.modeset=1" "amd_iommu=on" "kvm-amd.avic=1" "kvm_amd.nested=1" "kvm_amd.sev=1" "acpi_enforce_resources=lax" "pcie_acs_override=downstream,multifunction" "quiet" "udev.log_level=0" ]; 
   boot.tmp.cleanOnBoot = true;
   boot.initrd.verbose = false;
   boot.consoleLogLevel = 0;
+
+  hardware.cpu.amd.updateMicrocode = true;
   
   boot.extraModprobeConfig = "options vfio-pci ids=10de:1381,10de:0fbc";
 
@@ -38,12 +53,15 @@
   services.gnome.gnome-keyring.enable = true;
   services.gnome.at-spi2-core.enable = true;
 
+  programs.nix-ld.enable = true;
+
   programs.hyprland = {
     enable = true;
     package = inputs.hyprland.packages.${pkgs.system}.hyprland;
     portalPackage = inputs.hyprland.packages."${pkgs.system}".xdg-desktop-portal-hyprland;
   };
 
+  security.polkit.enable = true;
   services.greetd = {
     enable = true;
     settings = rec {
@@ -55,10 +73,23 @@
     };
   };
 
+#services.xserver.enable = true;
+#services.xserver.libinput.mouse.accelProfile = "flat";  
+#services.xserver.displayManager.sddm.enable = true;
+#services.desktopManager.plasma6.enable = true;
+
+#services.xserver.displayManager.gdm.enable = true;
+#services.xserver.windowManager.windowmaker.enable = true;
+#services.xserver.desktopManager.gnome.enable = true;
+
+#hardware.pulseaudio.enable = false;
+services.mullvad-vpn.enable = true;
+
   # udev rules for rgb, keyboard etc
   services.udev.packages = with pkgs; [
    via
    openrgb
+   android-udev-rules
   ];
 
   hardware.opengl = {
@@ -67,6 +98,7 @@
     driSupport32Bit = true;
     extraPackages = with pkgs; [
        nvidia-vaapi-driver
+       egl-wayland
     ];
   };  
   services.xserver.videoDrivers = ["nvidia"];
@@ -91,10 +123,10 @@
 
   programs.fish.enable = true;
 
-  fileSystems."/mnt/hdd" = {
-    device = "/dev/sda1";
-    fsType = "btrfs";
-  };
+#  fileSystems."/mnt/hdd" = {
+#    device = "/dev/sda1";
+#    fsType = "btrfs";
+#  };
 
   fileSystems."/mnt/share" = {
     device = "192.168.0.104:/mnt/pool";
@@ -107,7 +139,7 @@
 
   users.users.skver = {
     isNormalUser = true;
-    extraGroups = [ "libvirtd" "wheel" "audio" "jackaudio" "storage" ];
+    extraGroups = [ "adbusers" "libvirtd" "cdrom" "wheel" "audio" "jackaudio" "docker" "storage" ];
     shell = pkgs.fish; 
   };
 
@@ -121,8 +153,8 @@
       runAsRoot = false;
       swtpm.enable = true;
       package = pkgs.qemu_kvm.overrideAttrs (attrs: {
- hostCpuOnly = true;
-        patches = attrs.patches ++ [ ../../patches/qemu-8.2.0.patch ];
+      hostCpuOnly = true;
+      patches = attrs.patches ++ [ ../../patches/qemu-8.2.0.patch ];
 	    });
       ovmf = {
         packages = [

@@ -3,7 +3,6 @@
  environment.systemPackages = with pkgs; [
     dunst
     cifs-utils
-    authy
     virt-manager
     glib
     alsa-utils
@@ -11,7 +10,7 @@
     wget
     zip
     alacritty
-    rofi
+    rofi-wayland
     gnome3.gnome-keyring
     gnome3.eog
     htop
@@ -31,8 +30,10 @@
     qjackctl
     shared-mime-info
     xdg-utils
+    protonup-qt
     (pkgs.hwloc.override {
       x11Support = true;
       })
+    lxqt.lxqt-policykit
   ];
 }
