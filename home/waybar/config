@@ -1,0 +1,41 @@
+{
+    "layer": "top",
+    "height": "auto", 
+    "spacing": 4, 
+    "modules-left": ["hyprland/workspaces", "wlr/taskbar"],
+    "modules-center": [],
+    "modules-right": ["network", "cpu", "memory", "temperature", "clock", "tray"],
+    "wlr/taskbar": {
+        "format": "{title}",
+        "tooltip": false,
+        "on-click": "activate",
+        "on-click-middle": "close",
+        "sort-by-app-id": true
+    },
+    "tray": {
+        "spacing": 0
+    },
+    "clock": {
+        "format": "{:%H:%M} ",
+        "format-alt": "{:%Y-%m-%d}"
+    },
+    "cpu": {
+        "format": "{usage}%",
+        "tooltip": false
+    },
+    "memory": {
+        "format": "{}%"
+    },
+    "temperature": {
+        "critical-threshold": 80,
+        "format": "{temperatureC}°C",
+        "hwmon-path": "/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon3/temp1_input"
+    },
+    "network": {
+        "format-ethernet": "{ipaddr}/{cidr} ",
+        "tooltip-format": "{ifname} via {gwaddr} ",
+        "format-linked": "{ifname} (No IP)",
+        "format-disconnected": "Disconnected ⚠"
+    }
+}
+

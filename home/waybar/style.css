@@ -1,0 +1,66 @@
+* {
+  all: initial;
+  font-family: "Dina", "siji";
+  font-size: 7pt;
+  transition: all 0.1s ease-in-out;
+}
+
+
+window#waybar {
+  background-color: transparent;
+}
+
+window#waybar > box {
+  background-color: #191919;
+  padding-bottom: 1px;
+  margin: 0px 0px 8px 0px;
+  box-shadow: 0px 4px 2px 1px rgba(0, 0, 0, 0.212);
+}
+
+#taskbar button.active {
+  background-color: #383838;
+  color: #ffffff;
+}
+
+#taskbar button {
+  background-color: #202020;
+  border: 1px solid #383838;
+  padding: 0px 2px 0px 2px;
+  margin: 0 1px;
+  color: #636363;
+}
+
+#workspaces button {
+  background-color: #202020;
+  border: 1px solid #2e2e2e;
+  padding: 0px 2px 0px 2px;
+  margin: 0 1px;
+}
+
+#workspaces button.active {
+  background-color: #383838;
+  color: #ffffff;
+}
+
+#network,
+#clock,
+#cpu,
+#memory,
+#temperature
+{
+  border: 1px solid #2e2e2e;
+  padding: 0px 2px 0px 2px;
+}
+
+#tray {
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+}
+
+tooltip {
+  background-color: #202020;
+  border: 1px solid #2e2e2e;
+  padding: 0px 2px 0px 2px;
+  margin: 0 1px;
+  color: #636363;
+}

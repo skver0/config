@@ -50,6 +50,9 @@
     nodePackages.pnpm
     gpu-screen-recorder
     gpu-screen-recorder-gtk
+    obsidian
+    bottles
+    mpvpaper
   ];
 
  #  programs.hyprlock.enable = true;
@@ -83,6 +86,8 @@
 #    ".config/polybar".source = ../../home/polybar;
     ".config/rofi".source = ../../home/rofi;
     ".config/alacritty".source = ../../home/alacritty;
+    ".config/hypr".source = ../../home/hypr;
+    ".config/waybar".source = ../../home/waybar;
   };
 
   xdg.enable = true;

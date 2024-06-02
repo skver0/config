@@ -27,7 +27,7 @@
   programs.adb.enable = true;
 
   virtualisation.docker.enable = true;
-  virtualisation.vmware.host.enable = true;
+#  virtualisation.vmware.host.enable = true;
   virtualisation.waydroid.enable = true;
 
   # security is my passion, how could you tell?
@@ -104,6 +104,14 @@ services.mullvad-vpn.enable = true;
   services.xserver.videoDrivers = ["nvidia"];
   hardware.nvidia.modesetting.enable = true;
   hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.beta;
+#  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.mkDriver {
+#    version = "555.42.02";
+#  sha256_64bit = "sha256-k7cI3ZDlKp4mT46jMkLaIrc2YUx1lh1wj/J4SVSHWyk=";
+#   sha256_aarch64 = "sha256-rtDxQjClJ+gyrCLvdZlT56YyHQ4sbaL+d5tL4L4VfkA=";
+#  openSha256 = "sha256-rtDxQjClJ+gyrCLvdZlT56YyHQ4sbaL+d5tL4L4VfkA=";
+#  settingsSha256 = "sha256-rtDxQjClJ+gyrCLvdZlT56YyHQ4sbaL+d5tL4L4VfkA="; 
+#    persistencedSha256 = lib.fakeSha256;
+#  };
 
   # torrent client, wireguard, nginx
   networking.firewall.allowedTCPPorts = [ 57466 24800 25565 80 ];
@@ -129,7 +137,7 @@ services.mullvad-vpn.enable = true;
 #  };
 
   fileSystems."/mnt/share" = {
-    device = "192.168.0.104:/mnt/pool";
+    device = "192.168.0.104:/mnt/pool/hdd/hdd";
     fsType = "nfs";
     options = [ 
        "x-systemd.automount" "noauto"
