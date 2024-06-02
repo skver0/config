@@ -46,7 +46,8 @@ window#waybar > box {
 #clock,
 #cpu,
 #memory,
-#temperature
+#temperature,
+#battery
 {
   border: 1px solid #2e2e2e;
   padding: 0px 2px 0px 2px;

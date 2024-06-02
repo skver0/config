@@ -27,7 +27,7 @@
     nodejs
     nodePackages.pnpm
     waybar
-    rofi-wayland
+    rofi
     kanshi
     wl-clipboard
     slurp
@@ -46,3 +46,4 @@
    };
   programs.home-manager.enable = true;
 }
+
