@@ -2,4 +2,4 @@
 personal .config repo
 
 rice:
-![rice](rice.png)
+![rice](rice.gif)
