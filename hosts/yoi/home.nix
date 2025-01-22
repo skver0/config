@@ -14,7 +14,7 @@
     grim
     slurp
     wl-clipboard
-    (jetbrains.plugins.addPlugins jetbrains.idea-ultimate [ "github-copilot" "darcula-pitch-black" ])
+    #(jetbrains.plugins.addPlugins jetbrains.idea-ultimate [ "github-copilot" "darcula-pitch-black" ])
     vscode
     easyeffects
     audacity
@@ -32,14 +32,11 @@
     steam-run
     spotify
     pfetch
-    flameshot
-    picom
     pywal
     rpi-imager
-#    texlive.combined.scheme-full
-    inputs.nix-gaming.packages.x86_64-linux.osu-lazer-bin
+    #texlive.combined.scheme-full
+    #inputs.nix-gaming.packages.x86_64-linux.osu-lazer-bin
     waybar
-    jdk17
     hyprpaper
     php
     mangohud
