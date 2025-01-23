@@ -1,9 +1,9 @@
 { config, pkgs, inputs, ... }:
 {
   imports = [
-    ../../modules/emacs.nix
+    #../../modules/emacs.nix
     ../../modules/discord.nix
-#    inputs.hyprlock.homeManagerModules.hyprlock
+    inputs.hyprcursor-phinger.homeManagerModules.hyprcursor-phinger
   ];
 
   home.username = "skver";
@@ -23,7 +23,6 @@
     gimp
     vial
     sshfs
-    telegram-desktop
     pavucontrol
     google-chrome
     qbittorrent
@@ -38,9 +37,7 @@
     #inputs.nix-gaming.packages.x86_64-linux.osu-lazer-bin
     waybar
     hyprpaper
-    php
     mangohud
-    python3
     any-nix-shell
     ark
     nodejs
@@ -50,15 +47,21 @@
     obsidian
     bottles
     mpvpaper
+    xivlauncher
+    virt-viewer
   ];
 
- #  programs.hyprlock.enable = true;
-
+  programs.hyprcursor-phinger.enable = true;
+  
+  programs.hyprlock = {
+    enable = true;
+  };
+  
   gtk = {
     enable = true;
     theme = {
       name = "Adwaita-dark";
-      package = pkgs.gnome.gnome-themes-extra;
+      package = pkgs.gnome-themes-extra;
     };
 
     gtk3.extraConfig = {

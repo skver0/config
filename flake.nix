@@ -15,13 +15,18 @@
       flake = false;
     };
 
+    hyprcursor-phinger.url = "github:jappie3/hyprcursor-phinger";
+
     nix-doom-emacs = {
       url = "github:nix-community/nix-doom-emacs";
       inputs.nix-straight.follows = "nix-straight";
     }; 
 
     hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
-#    hyprlock.url = "github:hyprwm/Hyprlock";
+    hyprlock.url = "github:hyprwm/Hyprlock";
+
+    aagl.url = "github:ezKEa/aagl-gtk-on-nix";
+    aagl.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs@{ self, nixpkgs, home-manager, nix-gaming, nix-doom-emacs, ... }: {

@@ -5,11 +5,12 @@
       ./hardware-configuration.nix
       ./system-packages.nix
       ../../modules/nixos.nix
+      inputs.aagl.nixosModules.default
     ];
 
   nix.settings = {
-    substituters = ["https://nix-gaming.cachix.org"];
-    trusted-public-keys = ["nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4=" "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
+    substituters = ["https://nix-gaming.cachix.org" "https://ezkea.cachix.org"];
+    trusted-public-keys = ["nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4=" "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI="];
   };
 
 #  nixpkgs.overlays = [
@@ -61,6 +62,8 @@
     portalPackage = inputs.hyprland.packages."${pkgs.system}".xdg-desktop-portal-hyprland;
   };
 
+  programs.anime-games-launcher.enable = true;
+
   security.polkit.enable = true;
   services.greetd = {
     enable = true;
@@ -73,17 +76,7 @@
     };
   };
 
-#services.xserver.enable = true;
-#services.xserver.libinput.mouse.accelProfile = "flat";  
-#services.xserver.displayManager.sddm.enable = true;
-#services.desktopManager.plasma6.enable = true;
-
-#services.xserver.displayManager.gdm.enable = true;
-#services.xserver.windowManager.windowmaker.enable = true;
-#services.xserver.desktopManager.gnome.enable = true;
-
-#hardware.pulseaudio.enable = false;
-services.mullvad-vpn.enable = true;
+  services.mullvad-vpn.enable = true;
 
   # udev rules for rgb, keyboard etc
   services.udev.packages = with pkgs; [
@@ -92,10 +85,8 @@ services.mullvad-vpn.enable = true;
    android-udev-rules
   ];
 
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
     extraPackages = with pkgs; [
        nvidia-vaapi-driver
        egl-wayland
@@ -104,14 +95,7 @@ services.mullvad-vpn.enable = true;
   services.xserver.videoDrivers = ["nvidia"];
   hardware.nvidia.modesetting.enable = true;
   hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.beta;
-#  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.mkDriver {
-#    version = "555.42.02";
-#  sha256_64bit = "sha256-k7cI3ZDlKp4mT46jMkLaIrc2YUx1lh1wj/J4SVSHWyk=";
-#   sha256_aarch64 = "sha256-rtDxQjClJ+gyrCLvdZlT56YyHQ4sbaL+d5tL4L4VfkA=";
-#  openSha256 = "sha256-rtDxQjClJ+gyrCLvdZlT56YyHQ4sbaL+d5tL4L4VfkA=";
-#  settingsSha256 = "sha256-rtDxQjClJ+gyrCLvdZlT56YyHQ4sbaL+d5tL4L4VfkA="; 
-#    persistencedSha256 = lib.fakeSha256;
-#  };
+  hardware.nvidia.open = true;
 
   # torrent client, wireguard, nginx
   networking.firewall.allowedTCPPorts = [ 57466 24800 25565 80 ];
@@ -131,13 +115,19 @@ services.mullvad-vpn.enable = true;
 
   programs.fish.enable = true;
 
-#  fileSystems."/mnt/hdd" = {
-#    device = "/dev/sda1";
-#    fsType = "btrfs";
-#  };
+  fileSystems."/mnt/hdd" = {
+    device = "/dev/disk/by-uuid/48AA28D3AA28BF76";
+    fsType = "ntfs";
+  };
+
+  fileSystems."/mnt/ssd" = {
+    device = "/dev/disk/by-uuid/911c6e23-3919-48b4-bc73-c6e3a73a0d1c";
+    fsType = "btrfs";
+    options = [ "compress=zstd" ];
+  };
 
   fileSystems."/mnt/share" = {
-    device = "192.168.0.104:/mnt/pool/hdd/hdd";
+    device = "192.168.0.104:/mnt/pool";
     fsType = "nfs";
     options = [ 
        "x-systemd.automount" "noauto"
@@ -160,18 +150,18 @@ services.mullvad-vpn.enable = true;
     qemu = {
       runAsRoot = false;
       swtpm.enable = true;
-      package = pkgs.qemu_kvm.overrideAttrs (attrs: {
-      hostCpuOnly = true;
-      patches = attrs.patches ++ [ ../../patches/qemu-8.2.0.patch ];
-	    });
+      #package = pkgs.qemu_kvm.overrideAttrs (attrs: {
+      #  hostCpuOnly = true;
+      #  patches = attrs.patches ++ [ ../../patches/qemu-8.2.0.patch ];
+	    #});
       ovmf = {
         packages = [
-          (pkgs.OVMFFull.override {
+         (pkgs.OVMFFull.override {
              secureBoot = true;
              tpmSupport = true;
-             edk2 = pkgs.edk2.overrideAttrs (attrs: {
-              patches = attrs.patches ++ [ ../../patches/edk2-to-am.patch ];
-            });
+            # edk2 = pkgs.edk2.overrideAttrs (attrs: {
+            #  patches = attrs.patches ++ [ ../../patches/edk2-to-am.patch ];
+            #});
           }).fd
         ];
       };
@@ -196,6 +186,10 @@ services.mullvad-vpn.enable = true;
 #        patch = ../../patches/rdtsc.patch;
 #     }
 #  ];
+
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
+  services.blueman.enable = true;
 
   system.stateVersion = "22.11"; # Did you read the comment? yes, dont change this value unless you know what you are doing
 }

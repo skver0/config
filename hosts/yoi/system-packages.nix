@@ -11,8 +11,8 @@
     zip
     alacritty
     rofi-wayland
-    gnome3.gnome-keyring
-    gnome3.eog
+    gnome-keyring
+    eog
     htop
     killall
     zip

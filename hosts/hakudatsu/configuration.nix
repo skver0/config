@@ -90,11 +90,11 @@ in
      htop
      glib
      dracula-theme
-     gnome3.adwaita-icon-theme
+     gnome.adwaita-icon-theme
      xdg-utils
      configure-gtk
-     gnome3.nautilus
-     gnome3.eog
+     gnome.nautilus
+     gnome.eog
      wineWowPackages.waylandFull
      winetricks
      php
