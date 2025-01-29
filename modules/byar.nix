@@ -4,10 +4,9 @@
 
 let
   version = "1.2988.0";
-  pname = "byar";
 in
 pkgs.appimageTools.wrapType2 {
-  pname = "${pname}";
+  pname = "byar";
   version = "${version}";
 
   src = pkgs.fetchurl {
