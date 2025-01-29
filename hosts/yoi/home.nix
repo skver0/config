@@ -49,6 +49,11 @@
     mpvpaper
     xivlauncher
     virt-viewer
+    rpcs3
+    slack
+    uxplay
+    inputs.zen-browser.packages."${system}".default
+    (import ./../../modules/byar.nix { pkgs = pkgs; })
   ];
 
   programs.hyprcursor-phinger.enable = true;

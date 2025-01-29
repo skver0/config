@@ -53,9 +53,11 @@ window#waybar > box {
   padding: 0px 2px 0px 2px;
 }
 
-#tray {
+#tray * {
   margin: 0px 0px 0px 0px;
   padding: 0px 0px 0px 0px;
+  background-color: #202020;
+  background: #202020;
 }
 
 tooltip {

@@ -38,7 +38,7 @@
   boot.loader.systemd-boot.configurationLimit = 2;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.supportedFilesystems = [ "ntfs" ];  
-  boot.kernelPackages = pkgs.linuxPackages_zen; #pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_zen; #pkgs.linuxKernel.packages.linux_xanmod_latest; #pkgs.linuxPackages_latest;
   boot.kernelModules = [ "i2c-dev" "i2c-piix4" "vfio-pci" "vfio" "vfio_iommu_type1" "vfio_virqfd" "nvidia_uvm" ];
   boot.kernelParams = [ "nvidia_drm.fbdev=1" "nvidia_drm.modeset=1" "amd_iommu=on" "kvm-amd.avic=1" "kvm_amd.nested=1" "kvm_amd.sev=1" "acpi_enforce_resources=lax" "pcie_acs_override=downstream,multifunction" "quiet" "udev.log_level=0" ]; 
   boot.tmp.cleanOnBoot = true;
@@ -137,7 +137,7 @@
 
   users.users.skver = {
     isNormalUser = true;
-    extraGroups = [ "adbusers" "libvirtd" "cdrom" "wheel" "audio" "jackaudio" "docker" "storage" ];
+    extraGroups = [ "adbusers" "libvirtd" "cdrom" "wheel" "audio" "jackaudio" "docker" "storage" "ntsync" ];
     shell = pkgs.fish; 
   };
 
@@ -190,6 +190,18 @@
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
   services.blueman.enable = true;
+
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;  # printing
+    publish = {
+      enable = true;
+      addresses = true;
+      workstation = true;
+      userServices = true;
+    };
+  };
+
 
   system.stateVersion = "22.11"; # Did you read the comment? yes, dont change this value unless you know what you are doing
 }

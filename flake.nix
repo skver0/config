@@ -17,19 +17,16 @@
 
     hyprcursor-phinger.url = "github:jappie3/hyprcursor-phinger";
 
-    nix-doom-emacs = {
-      url = "github:nix-community/nix-doom-emacs";
-      inputs.nix-straight.follows = "nix-straight";
-    }; 
-
     hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
     hyprlock.url = "github:hyprwm/Hyprlock";
 
     aagl.url = "github:ezKEa/aagl-gtk-on-nix";
     aagl.inputs.nixpkgs.follows = "nixpkgs";
+    
+    zen-browser.url = "github:0xc000022070/zen-browser-flake";
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, nix-gaming, nix-doom-emacs, ... }: {
+  outputs = inputs@{ self, nixpkgs, home-manager, nix-gaming, ... }: {
     nixosConfigurations = {
       
       yoi = nixpkgs.lib.nixosSystem {
