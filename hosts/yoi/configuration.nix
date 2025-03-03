@@ -6,6 +6,7 @@
       ./system-packages.nix
       ../../modules/nixos.nix
       inputs.aagl.nixosModules.default
+      inputs.spicetify-nix.nixosModules.default
     ];
 
   nix.settings = {
@@ -13,23 +14,14 @@
     trusted-public-keys = ["nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4=" "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI="];
   };
 
-#  nixpkgs.overlays = [
-#      (_: prev: {
-#          steam = prev.steam.override {
-#              extraProfile = "export STEAM_EXTRA_COMPAT_TOOLS_PATHS='${inputs.nix-gaming.packages.${pkgs.system}.proton-ge}'";
-#          };
-#      }) 
-#  ];
-
   programs.steam.extraCompatPackages = [ pkgs.proton-ge-bin ];
   programs.steam.enable = true;
 
-
   programs.adb.enable = true;
 
-  virtualisation.docker.enable = true;
-#  virtualisation.vmware.host.enable = true;
-  virtualisation.waydroid.enable = true;
+  # virtualisation.docker.enable = true;
+  # virtualisation.vmware.host.enable = true;
+  # virtualisation.waydroid.enable = true;
 
   # security is my passion, how could you tell?
   security.sudo.wheelNeedsPassword = false;
@@ -38,6 +30,18 @@
   boot.loader.systemd-boot.configurationLimit = 2;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.supportedFilesystems = [ "ntfs" ];  
+  /*boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_zen.override {
+    argsOverride = rec {
+      version = "6.13.0-zen";
+      modDirVersion = "6.13.0-zen";
+      src = pkgs.fetchFromGitHub {
+        owner = "zen-kernel";
+        repo = "zen-kernel";
+        rev = "6.13/main";
+        sha256 = "sha256-Ru8U0nkqFO9b8fVwz+PaV+MQB+UPZ4sPTJkE5eufKM8=";
+      };
+    };
+  });*/
   boot.kernelPackages = pkgs.linuxPackages_zen; #pkgs.linuxKernel.packages.linux_xanmod_latest; #pkgs.linuxPackages_latest;
   boot.kernelModules = [ "i2c-dev" "i2c-piix4" "vfio-pci" "vfio" "vfio_iommu_type1" "vfio_virqfd" "nvidia_uvm" ];
   boot.kernelParams = [ "nvidia_drm.fbdev=1" "nvidia_drm.modeset=1" "amd_iommu=on" "kvm-amd.avic=1" "kvm_amd.nested=1" "kvm_amd.sev=1" "acpi_enforce_resources=lax" "pcie_acs_override=downstream,multifunction" "quiet" "udev.log_level=0" ]; 
@@ -49,7 +53,7 @@
   
   boot.extraModprobeConfig = "options vfio-pci ids=10de:1381,10de:0fbc";
 
-  services.postgresql.enable = true;
+  # services.postgresql.enable = true;
   services.dbus.enable = true;
   services.gnome.gnome-keyring.enable = true;
   services.gnome.at-spi2-core.enable = true;
@@ -61,6 +65,10 @@
     package = inputs.hyprland.packages.${pkgs.system}.hyprland;
     portalPackage = inputs.hyprland.packages."${pkgs.system}".xdg-desktop-portal-hyprland;
   };
+
+  #services.xserver.enable = true;
+  #services.displayManager.sddm.enable = true;
+  #services.desktopManager.plasma6.enable = true;
 
   programs.anime-games-launcher.enable = true;
 
@@ -75,9 +83,7 @@
       default_session = initial_session;
     };
   };
-
-  services.mullvad-vpn.enable = true;
-
+  
   # udev rules for rgb, keyboard etc
   services.udev.packages = with pkgs; [
    via
@@ -91,7 +97,33 @@
        nvidia-vaapi-driver
        egl-wayland
     ];
+    package = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system}.mesa.drivers;
+    enable32Bit = true;
+    package32 = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system}.pkgsi686Linux.mesa.drivers;
   };  
+
+  programs.spicetify = {
+    enable = true;
+    # https://github.com/BlafKing/spicetify-cat-jam-synced/tree/main/marketplace
+    enabledExtensions = with inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.system}.extensions; [
+      adblockify
+      hidePodcasts
+      ({
+        src = pkgs.fetchFromGitHub {
+          owner = "BlafKing";
+          repo = "spicetify-cat-jam-synced";
+          rev = "e7bfd49fcc13457bbc98e696294cf5cf43eb6c31";
+          hash = "sha256-pyYa5i/gmf01dkEF9I2awrTGLqkAjV9edJBsThdFRv8=";
+        };
+
+        name = "marketplace/cat-jam.js";
+      })
+    ];
+    theme = inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.system}.themes.catppuccin;
+    colorScheme = "mocha";
+  };
+
+
   services.xserver.videoDrivers = ["nvidia"];
   hardware.nvidia.modesetting.enable = true;
   hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.beta;
@@ -125,7 +157,16 @@
     fsType = "btrfs";
     options = [ "compress=zstd" ];
   };
-
+  
+  fileSystems."/mnt/share" = {
+    device = "//192.168.0.104/pool";
+    fsType = "cifs";
+    options = let
+      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+    in ["${automount_opts},credentials=/smb-secrets"];
+  };
+  
+  /*
   fileSystems."/mnt/share" = {
     device = "192.168.0.104:/mnt/pool";
     fsType = "nfs";
@@ -133,11 +174,11 @@
        "x-systemd.automount" "noauto"
        "x-systemd.idle-timeout=600"
     ];
-  };
+  };*/
 
   users.users.skver = {
     isNormalUser = true;
-    extraGroups = [ "adbusers" "libvirtd" "cdrom" "wheel" "audio" "jackaudio" "docker" "storage" "ntsync" ];
+    extraGroups = [ "adbusers" "libvirtd" "cdrom" "wheel" "audio" "jackaudio" "docker" "video" "input" ];
     shell = pkgs.fish; 
   };
 
@@ -180,12 +221,12 @@
 
   # more kvm fuckery, im so fucking fed up with anticheats, thank you mr corpo battleye
 
-#  boot.kernelPatches = [
-#     {
-#        name = "rdtsc";
-#        patch = ../../patches/rdtsc.patch;
-#     }
-#  ];
+  #  boot.kernelPatches = [
+  #     {
+  #        name = "rdtsc";
+  #        patch = ../../patches/rdtsc.patch;
+  #     }
+  #  ];
 
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
@@ -202,6 +243,11 @@
     };
   };
 
-
+  services.zerotierone = {
+    enable = true;
+    joinNetworks = [
+      "9F77FC393E1D110E"
+    ];
+  };
   system.stateVersion = "22.11"; # Did you read the comment? yes, dont change this value unless you know what you are doing
 }

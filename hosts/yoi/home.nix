@@ -8,7 +8,7 @@
 
   home.username = "skver";
   home.homeDirectory = "/home/skver";
-
+  
   home.stateVersion = "23.05"; 
   home.packages = with pkgs; [
     grim
@@ -20,7 +20,6 @@
     audacity
     prismlauncher
     lutris
-    gimp
     vial
     sshfs
     pavucontrol
@@ -29,23 +28,22 @@
     yt-dlp
     obs-studio
     steam-run
-    spotify
     pfetch
     pywal
     rpi-imager
     #texlive.combined.scheme-full
     #inputs.nix-gaming.packages.x86_64-linux.osu-lazer-bin
+    #inputs.nix-gaming.packages.x86_64-linux.osu-stable
     waybar
     hyprpaper
     mangohud
     any-nix-shell
-    ark
+    kdePackages.ark
     nodejs
     nodePackages.pnpm
     gpu-screen-recorder
     gpu-screen-recorder-gtk
     obsidian
-    bottles
     mpvpaper
     xivlauncher
     virt-viewer
@@ -54,6 +52,8 @@
     uxplay
     inputs.zen-browser.packages."${system}".default
     (import ./../../modules/byar.nix { pkgs = pkgs; })
+    remmina
+    xorg.xrandr
   ];
 
   programs.hyprcursor-phinger.enable = true;
@@ -61,6 +61,8 @@
   programs.hyprlock = {
     enable = true;
   };
+
+  services.hypridle.enable = true;
   
   gtk = {
     enable = true;
@@ -81,11 +83,7 @@
       '';
     };
   };
-
-  programs.firefox = {
-    enable = true;
-  };
-
+  
   home.file = {
 #    ".config/i3".source = ../../home/i3;
 #    ".config/polybar".source = ../../home/polybar;

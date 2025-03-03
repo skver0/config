@@ -12,9 +12,6 @@ window#waybar {
 
 window#waybar > box {
   background-color: #191919;
-  padding-bottom: 1px;
-  margin: 0px 0px 8px 0px;
-  box-shadow: 0px 4px 2px 1px rgba(0, 0, 0, 0.212);
 }
 
 #taskbar button.active {
