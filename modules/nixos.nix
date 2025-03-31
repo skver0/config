@@ -39,11 +39,12 @@
   };
 
   # nightlight
-  services.geoclue2.appConfig.redshift.isAllowed = true;
+  #services.geoclue2.appConfig.redshift.isAllowed = true;
   location.provider = "geoclue2";
+  services.geoclue2.geoProviderUrl = "https://api.beacondb.net/v1/geolocate";
 
   services.redshift = {
-    enable = true;
+    enable = false;
     brightness = {
       day = "1";
       night = "1";

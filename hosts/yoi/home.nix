@@ -54,17 +54,22 @@
     (import ./../../modules/byar.nix { pkgs = pkgs; })
     remmina
     xorg.xrandr
+    solaar
+    piper
+    plexamp
+    umu-launcher
+    code-cursor
   ];
 
   programs.hyprcursor-phinger.enable = true;
   
   programs.hyprlock = {
-    enable = true;
+    enable = false;
   };
 
-  services.hypridle.enable = true;
+  services.hypridle.enable = false;
   
-  gtk = {
+/*  gtk = {
     enable = true;
     theme = {
       name = "Adwaita-dark";
@@ -82,8 +87,9 @@
         gtk-application-prefer-dark-theme=1
       '';
     };
+    
   };
-  
+*/  
   home.file = {
 #    ".config/i3".source = ../../home/i3;
 #    ".config/polybar".source = ../../home/polybar;

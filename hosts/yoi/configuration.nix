@@ -19,7 +19,7 @@
 
   programs.adb.enable = true;
 
-  # virtualisation.docker.enable = true;
+  virtualisation.docker.enable = true;
   # virtualisation.vmware.host.enable = true;
   # virtualisation.waydroid.enable = true;
 
@@ -51,9 +51,9 @@
 
   hardware.cpu.amd.updateMicrocode = true;
   
-  boot.extraModprobeConfig = "options vfio-pci ids=10de:1381,10de:0fbc";
+  boot.extraModprobeConfig = "options vfio-pci ids=10de:0e22,10de:0beb";
 
-  # services.postgresql.enable = true;
+  #services.postgresql.enable = true;
   services.dbus.enable = true;
   services.gnome.gnome-keyring.enable = true;
   services.gnome.at-spi2-core.enable = true;
@@ -67,13 +67,13 @@
   };
 
   #services.xserver.enable = true;
-  #services.displayManager.sddm.enable = true;
-  #services.desktopManager.plasma6.enable = true;
+  services.displayManager.sddm.enable = true;
+  services.desktopManager.plasma6.enable = true;
 
   programs.anime-games-launcher.enable = true;
 
   security.polkit.enable = true;
-  services.greetd = {
+  /*services.greetd = {
     enable = true;
     settings = rec {
       initial_session = {
@@ -82,13 +82,14 @@
       };
       default_session = initial_session;
     };
-  };
+  };*/
   
   # udev rules for rgb, keyboard etc
   services.udev.packages = with pkgs; [
    via
    openrgb
    android-udev-rules
+   logitech-udev-rules
   ];
 
   hardware.graphics = {
@@ -97,26 +98,26 @@
        nvidia-vaapi-driver
        egl-wayland
     ];
-    package = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system}.mesa.drivers;
+   # package = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system}.mesa.drivers;
     enable32Bit = true;
-    package32 = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system}.pkgsi686Linux.mesa.drivers;
+   # package32 = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system}.pkgsi686Linux.mesa.drivers;
   };  
 
   programs.spicetify = {
     enable = true;
+    alwaysEnableDevTools = true;
     # https://github.com/BlafKing/spicetify-cat-jam-synced/tree/main/marketplace
-    enabledExtensions = with inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.system}.extensions; [
-      adblockify
-      hidePodcasts
+    enabledExtensions = [
+      inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.system}.extensions.adblockify
+      inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.system}.extensions.hidePodcasts
       ({
-        src = pkgs.fetchFromGitHub {
+        src = (pkgs.fetchFromGitHub {
           owner = "BlafKing";
           repo = "spicetify-cat-jam-synced";
           rev = "e7bfd49fcc13457bbc98e696294cf5cf43eb6c31";
           hash = "sha256-pyYa5i/gmf01dkEF9I2awrTGLqkAjV9edJBsThdFRv8=";
-        };
-
-        name = "marketplace/cat-jam.js";
+        }) + /marketplace;
+        name = "cat-jam.js";
       })
     ];
     theme = inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.system}.themes.catppuccin;
@@ -186,29 +187,6 @@
     NIXOS_OZONE_WL = "1";
   };
 
-  virtualisation.libvirtd = {
-    enable = true;
-    qemu = {
-      runAsRoot = false;
-      swtpm.enable = true;
-      #package = pkgs.qemu_kvm.overrideAttrs (attrs: {
-      #  hostCpuOnly = true;
-      #  patches = attrs.patches ++ [ ../../patches/qemu-8.2.0.patch ];
-	    #});
-      ovmf = {
-        packages = [
-         (pkgs.OVMFFull.override {
-             secureBoot = true;
-             tpmSupport = true;
-            # edk2 = pkgs.edk2.overrideAttrs (attrs: {
-            #  patches = attrs.patches ++ [ ../../patches/edk2-to-am.patch ];
-            #});
-          }).fd
-        ];
-      };
-    };
-  };
-
   environment.etc = {
     "ovmf/edk2-x86_64-secure-code.fd" = {
       source = config.virtualisation.libvirtd.qemu.package + "/share/qemu/edk2-x86_64-secure-code.fd";
@@ -219,18 +197,45 @@
     };
   };
 
+  virtualisation.libvirtd = {
+    enable = true;
+    qemu = {
+      runAsRoot = false;
+      swtpm.enable = true;
+      package = pkgs.qemu_kvm.overrideAttrs (attrs: {
+        hostCpuOnly = true;
+        patches = attrs.patches ++ [ ../../patches/qemu-9.2.2.patch ];
+	    });
+      ovmf = {
+        packages = [
+         (pkgs.OVMFFull.override {
+             secureBoot = true;
+             tpmSupport = true;
+             edk2 = pkgs.edk2.overrideAttrs (attrs: {
+              patches = attrs.patches ++ [ ../../patches/edk2-to-am.patch ];
+            });
+          }).fd
+        ];
+      };
+    };
+  };
+
+
+
   # more kvm fuckery, im so fucking fed up with anticheats, thank you mr corpo battleye
 
-  #  boot.kernelPatches = [
-  #     {
-  #        name = "rdtsc";
-  #        patch = ../../patches/rdtsc.patch;
-  #     }
-  #  ];
+  boot.kernelPatches = [
+    {
+      name = "rdtsc";
+      patch = ../../patches/rdtsc.patch;
+    }
+  ];
 
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
   services.blueman.enable = true;
+
+  services.ratbagd.enable = true;
 
   services.avahi = {
     enable = true;
@@ -249,5 +254,10 @@
       "9F77FC393E1D110E"
     ];
   };
+
+  hardware.keyboard.qmk.enable = true;
+
+  hardware.logitech.wireless.enable = true;
+
   system.stateVersion = "22.11"; # Did you read the comment? yes, dont change this value unless you know what you are doing
 }
